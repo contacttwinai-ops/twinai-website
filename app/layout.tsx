@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TwinAI",
   description: "AI-powered SaaS solutions for your business!",
+  verification: {
+    google: "KK9iYEHTsTBteR4t5BWJbkVtNdq1604Re-041Y9JIeI",
+  },
 };
 
 export default function RootLayout({
@@ -23,16 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <meta
-          name="google-site-verification"
-          content="KK9iYEHTsTBteR4t5BWJbkVtNdq1604Re-041Y9JIeI"
-        />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-      </body>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
