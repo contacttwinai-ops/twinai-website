@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "TwinAI",
   description: "AI-powered SaaS solutions for your business!",
   verification: {
-    google: "KK9iYEHTsTBteR4t5BWJbkVtNdq1604Re-041Y9JIeI",
+    google: "cdoObQLCJU3MYHrgCX7A2or8qMCfsSU73IaVIOd2L8Y",
   },
 };
 
