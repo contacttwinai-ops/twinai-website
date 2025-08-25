@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://twinai-website.vercel.app/sitemap.xml

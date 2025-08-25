@@ -1,24 +1,24 @@
 {
-  "name": "twinai-website",
-  "version": "0.1.0",
+  "name": "qynero",
+  "version": "1.0.0",
   "private": true,
+  "description": "Qynero AI SaaS Platform - Automate your business with AI-powered SaaS tools.",
+  "author": "Qynero",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.6"
+    "firebase": "^12.1.0",
+    "next": "13.x",
+    "next-auth": "^4.24.11",
+    "react": "18.x",
+    "react-dom": "18.x"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "typescript": "5.9.2"
   }
 }

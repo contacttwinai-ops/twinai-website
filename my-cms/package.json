@@ -1,20 +1,22 @@
 {
-  "name": "my-cms",
-  "version": "0.1.0",
+  "name": "qynero",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "export": "next export",
+    "start": "next start"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.6"
+    "firebase": "^9.0.0",
+    "next": "13.5.11",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "typescript": "^5.1.3"
   }
 }
