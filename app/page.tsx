@@ -7,37 +7,37 @@ const services = [
     title: "CRM Automation",
     slug: "crm",
     description: "Automate customer management and sales with smart workflows.",
-    color: "#E3F2FD"
+    color: "bg-blue-50"
   },
   {
     title: "AI Billing",
     slug: "ai-billing",
     description: "Effortless invoicing, expense tracking, and billing using AI.",
-    color: "#E8F5E9"
+    color: "bg-green-50"
   },
   {
     title: "AI Chat Support",
     slug: "ai-chat-support",
     description: "24/7 automated customer support powered by machine learning.",
-    color: "#FFF3E0"
+    color: "bg-orange-50"
   },
   {
     title: "Predictive Analytics",
     slug: "predictive-analytics",
     description: "Forecast revenue, demand, and user behavior with AI models.",
-    color: "#F3E5F5"
+    color: "bg-purple-50"
   },
   {
     title: "SaaS Email Campaigns",
     slug: "email-campaigns",
     description: "Send, track, and optimize your campaigns with AI recommendations.",
-    color: "#FBE9E7"
+    color: "bg-pink-50"
   },
   {
     title: "Document Intelligence",
     slug: "document-intelligence",
     description: "Auto-tag, classify, and summarize business docs in seconds.",
-    color: "#ECEFF1"
+    color: "bg-gray-100"
   }
 ];
 
@@ -45,104 +45,38 @@ export default function HomePage() {
   const { data: session } = useSession();
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        backgroundColor: "#f6f8fa"
-      }}
-    >
-      {/* Nav/Header */}
-      <nav
-        style={{
-          background: "linear-gradient(90deg, #1976d2 75%, #43a047 100%)",
-          color: "white",
-          padding: "1rem 2.5rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          {session ? (
-            <>
-              <span style={{ marginRight: "18px" }}>
-                Welcome, <b>{session.user?.email}</b>
-              </span>
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                style={{
-                  background: "#fff",
-                  color: "#1976d2",
-                  border: "none",
-                  padding: "8px 16px",
-                  borderRadius: "6px",
-                  fontWeight: 500,
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  boxShadow: "0 2px 8px rgba(25,118,210,.12)"
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : null}
-        </div>
+    <main className="min-h-screen font-sans bg-gray-50">
+
+      {/* Navbar */}
+      <nav className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-6 py-4 flex justify-between items-center">
+        {/* Navbar is now empty, no site name */}
       </nav>
 
       {/* Hero Section */}
-      <section
-        style={{
-          textAlign: "center",
-          padding: "2.5rem 0 2rem 0",
-          color: "#1976d2",
-          background: "#e3f2fd"
-        }}
-      >
-        <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "1rem" }}>
+      <section className="text-center py-12 bg-blue-50 px-4">
+        <h1 className="text-3xl md:text-5xl font-bold text-blue-700 mb-4">
           All Your Powerful SaaS & AI Tools, On One Platform.
         </h1>
-        <p style={{ fontSize: "1.3rem", color: "#555", marginBottom: "1.5rem" }}>
+        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
           Automate your business, gain insights, boost productivity & support customers — with AI-powered cloud solutions.
         </p>
       </section>
 
       {/* Services Section */}
-      <section style={{ margin: "0 auto", maxWidth: "1100px", padding: "1rem 1rem 2rem" }}>
-        <h2 style={{ textAlign: "center", color: "#1976d2", margin: "2.2rem 0 2rem", fontSize: "2rem" }}>
+      <section className="max-w-6xl mx-auto px-4 py-10">
+        <h2 className="text-2xl md:text-3xl font-semibold text-blue-700 text-center mb-10">
           Important SaaS & AI Services
         </h2>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
-          gap: "2rem",
-        }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {services.map((service) => (
             <div
               key={service.title}
-              style={{
-                background: service.color,
-                padding: "1.6rem",
-                borderRadius: "12px",
-                boxShadow: "0 2px 12px rgba(25,118,210,0.08)",
-                border: "1px solid #e0e0e0",
-                textAlign: "left",
-              }}
+              className={`${service.color} p-6 rounded-xl shadow-md border border-gray-200`}
             >
-              <h3 style={{ color: "#1565c0", marginBottom: "12px" }}>{service.title}</h3>
-              <p style={{ color: "#444", marginBottom: "18px" }}>{service.description}</p>
+              <h3 className="text-xl font-semibold text-blue-800 mb-3">{service.title}</h3>
+              <p className="text-gray-600 mb-4">{service.description}</p>
               <Link href={`/services/${service.slug}`}>
-                <button
-                  style={{
-                    background: "#1976d2",
-                    color: "#fff",
-                    border: "none",
-                    padding: "8px 20px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontWeight: 500
-                  }}
-                >
+                <button className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
                   Explore
                 </button>
               </Link>
@@ -152,24 +86,15 @@ export default function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section
-        style={{
-          margin: "2rem auto 0",
-          maxWidth: "920px",
-          background: "#e8f5e9",
-          borderRadius: "10px",
-          border: "1px solid #cfd8dc",
-          padding: "2rem",
-          boxShadow: "0 2px 12px rgba(67,160,71,0.10)",
-        }}>
-        <h2 style={{ textAlign: "center", color: "#43a047", fontSize: "1.7rem", marginBottom: "24px" }}>
+      <section className="max-w-5xl mx-auto bg-green-50 border border-gray-300 rounded-xl p-8 shadow-md mb-12">
+        <h2 className="text-2xl font-semibold text-green-700 text-center mb-6">
           Simple & Affordable Pricing
         </h2>
-        <div style={{ display: "grid", gap: "1.8rem" }}>
-          <div style={{ background: "#ffffff", padding: "1rem 1.5rem", borderRadius: "8px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ marginBottom: "6px", color: "#2e7d32" }}>Starter: ₹299/month</h3>
-            <p style={{ marginBottom: "8px", fontWeight: "600" }}>Perfect for freelancers & solo founders</p>
-            <ul style={{ marginLeft: "1rem", color: "#555", fontSize: "0.95rem" }}>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-green-700 font-bold mb-2">Starter: ₹299/month</h3>
+            <p className="font-medium mb-3">Perfect for freelancers & solo founders</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
               <li>Basic CRM automation (leads, follow-ups)</li>
               <li>AI-powered billing for simple invoices</li>
               <li>AI chat support (limited usage)</li>
@@ -179,10 +104,10 @@ export default function HomePage() {
               <li>Email support</li>
             </ul>
           </div>
-          <div style={{ background: "#ffffff", padding: "1rem 1.5rem", borderRadius: "8px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ marginBottom: "6px", color: "#2e7d32" }}>Business: ₹899/month</h3>
-            <p style={{ marginBottom: "8px", fontWeight: "600" }}>For growing teams & startups</p>
-            <ul style={{ marginLeft: "1rem", color: "#555", fontSize: "0.95rem" }}>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-green-700 font-bold mb-2">Business: ₹899/month</h3>
+            <p className="font-medium mb-3">For growing teams & startups</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
               <li>Advanced CRM automation (multiple pipelines)</li>
               <li>AI billing with expense tracking</li>
               <li>Priority AI chat support</li>
@@ -192,10 +117,10 @@ export default function HomePage() {
               <li>Priority email support</li>
             </ul>
           </div>
-          <div style={{ background: "#ffffff", padding: "1rem 1.5rem", borderRadius: "8px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ marginBottom: "6px", color: "#2e7d32" }}>Pro: ₹1799/month</h3>
-            <p style={{ marginBottom: "8px", fontWeight: "600" }}>For mature businesses & power users</p>
-            <ul style={{ marginLeft: "1rem", color: "#555", fontSize: "0.95rem" }}>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-green-700 font-bold mb-2">Pro: ₹1799/month</h3>
+            <p className="font-medium mb-3">For mature businesses & power users</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
               <li>Unlimited sales pipelines & custom fields</li>
               <li>Advanced automations & workflows</li>
               <li>Predictive analytics & lead scoring</li>
@@ -205,10 +130,10 @@ export default function HomePage() {
               <li>Premium email & chat support</li>
             </ul>
           </div>
-          <div style={{ background: "#ffffff", padding: "1rem 1.5rem", borderRadius: "8px", boxShadow: "0 1px 6px rgba(0,0,0,0.1)" }}>
-            <h3 style={{ marginBottom: "6px", color: "#2e7d32" }}>Enterprise: Custom Pricing</h3>
-            <p style={{ marginBottom: "8px", fontWeight: "600" }}>For large organizations & custom needs</p>
-            <ul style={{ marginLeft: "1rem", color: "#555", fontSize: "0.95rem" }}>
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h3 className="text-green-700 font-bold mb-2">Enterprise: Custom Pricing</h3>
+            <p className="font-medium mb-3">For large organizations & custom needs</p>
+            <ul className="list-disc list-inside text-gray-600 space-y-1">
               <li>Unlimited users & storage</li>
               <li>Dedicated account manager</li>
               <li>Custom hosting & advanced security</li>
@@ -217,22 +142,14 @@ export default function HomePage() {
             </ul>
           </div>
         </div>
-        <p style={{ marginTop: "1.5rem", color: "#555", textAlign: "center" }}>
+        <p className="text-center text-gray-600 mt-6 font-medium">
           <b>All plans start with a 14-day free trial. No credit card required!</b>
         </p>
       </section>
 
       {/* Footer */}
-      <footer
-        style={{
-          textAlign: "center",
-          marginTop: "3rem",
-          color: "#888",
-          fontSize: ".98rem",
-          padding: "1rem 0"
-        }}
-      >
-        © {new Date().getFullYear()} &mdash; All rights reserved.
+      <footer className="text-center text-gray-500 py-6 border-t">
+        © {new Date().getFullYear()} — All rights reserved.
       </footer>
     </main>
   );
