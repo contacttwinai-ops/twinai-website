@@ -1,4 +1,6 @@
 'use client';
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 const services = [
   {
@@ -40,6 +42,8 @@ const services = [
 ];
 
 export default function HomePage() {
+  const { data: session } = useSession();
+
   return (
     <main
       style={{
@@ -48,6 +52,44 @@ export default function HomePage() {
         backgroundColor: "#f6f8fa"
       }}
     >
+      {/* Nav/Header */}
+      <nav
+        style={{
+          background: "linear-gradient(90deg, #1976d2 75%, #43a047 100%)",
+          color: "white",
+          padding: "1rem 2.5rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          {session ? (
+            <>
+              <span style={{ marginRight: "18px" }}>
+                Welcome, <b>{session.user?.email}</b>
+              </span>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                style={{
+                  background: "#fff",
+                  color: "#1976d2",
+                  border: "none",
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  fontWeight: 500,
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  boxShadow: "0 2px 8px rgba(25,118,210,.12)"
+                }}
+              >
+                Logout
+              </button>
+            </>
+          ) : null}
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section
         style={{
@@ -64,6 +106,7 @@ export default function HomePage() {
           Automate your business, gain insights, boost productivity & support customers — with AI-powered cloud solutions.
         </p>
       </section>
+
       {/* Services Section */}
       <section style={{ margin: "0 auto", maxWidth: "1100px", padding: "1rem 1rem 2rem" }}>
         <h2 style={{ textAlign: "center", color: "#1976d2", margin: "2.2rem 0 2rem", fontSize: "2rem" }}>
@@ -88,23 +131,26 @@ export default function HomePage() {
             >
               <h3 style={{ color: "#1565c0", marginBottom: "12px" }}>{service.title}</h3>
               <p style={{ color: "#444", marginBottom: "18px" }}>{service.description}</p>
-              <button
-                style={{
-                  background: "#1976d2",
-                  color: "#fff",
-                  border: "none",
-                  padding: "8px 20px",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontWeight: 500
-                }}
-              >
-                Explore
-              </button>
+              <Link href={`/services/${service.slug}`}>
+                <button
+                  style={{
+                    background: "#1976d2",
+                    color: "#fff",
+                    border: "none",
+                    padding: "8px 20px",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontWeight: 500
+                  }}
+                >
+                  Explore
+                </button>
+              </Link>
             </div>
           ))}
         </div>
       </section>
+
       {/* Pricing Section */}
       <section
         style={{
@@ -175,6 +221,7 @@ export default function HomePage() {
           <b>All plans start with a 14-day free trial. No credit card required!</b>
         </p>
       </section>
+
       {/* Footer */}
       <footer
         style={{
@@ -185,7 +232,7 @@ export default function HomePage() {
           padding: "1rem 0"
         }}
       >
-        © {new Date().getFullYear()} Qynero &mdash; All rights reserved.
+        © {new Date().getFullYear()} &mdash; All rights reserved.
       </footer>
     </main>
   );
