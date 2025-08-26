@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://twinai-website.vercel.app/</loc>
-    <lastmod>2025-08-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://twinai-website.vercel.app/about</loc>
-    <lastmod>2025-08-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- Aur pages ke liye bhi aise url tags add kar sakte hain -->
-</urlset>
+import { MetadataRoute } from 'next'
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: 'https://qynero.vercel.app',
+      lastModified: new Date(),
+      changefreq: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: 'https://qynero.vercel.app/about',
+      lastModified: new Date(),
+      changefreq: 'monthly',
+      priority: 0.8,
+    },
+    // aur jitne pages hain, unke liye yeh object banate jayein
+  ]
+}
