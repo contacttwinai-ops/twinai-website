@@ -5,8 +5,8 @@ import { SessionProvider } from "next-auth/react";
 import SessionWrapper from './SessionWrapper';
 
 export const metadata: Metadata = {
-  title: "Qynero - AI-Powered Business Solutions",
-  description: "Transform your business with Qynero's AI-powered solutions including CRM, document intelligence, predictive analytics, and more.",
+  title: "Qynero - AI & SaaS Powered Business Solutions",
+  description: "Transform your business with Qynero's AI & SaaS-powered solutions including CRM, document intelligence, predictive analytics, and more.",
   // verification wala part hata den
 };
 
