@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
     <loc>https://qynero.vercel.app/</loc>
     <lastmod>2025-08-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
   <url>
     <loc>https://qynero.vercel.app/about</loc>
     <lastmod>2025-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- jitne pages ho utne url tags add karein -->
-
+  <!-- Jitne bhi pages hain unke liye aur <url> tags add kar sakte hain -->
 </urlset>
