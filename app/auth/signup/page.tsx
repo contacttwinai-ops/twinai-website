@@ -1,99 +1,93 @@
 "use client";
-
 import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../lib/firebaseConfig";
-import {
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithPopup,
-} from "firebase/auth";
+import Link from "next/link";
 
 export default function SignupPage() {
-    // State declarations inside the component
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const router = useRouter();
+    const [errorMsg, setErrorMsg] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
-    // Handlers inside the component
-    const handleEmailSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setErrorMsg("");
+
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            router.push("/");
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
+            // Redirect or show success message...
+        } catch (error: unknown) {
+            if (typeof error === "object" && error !== null && "code" in error) {
+                const err = error as { code: string };
+                switch (err.code) {
+                    case "auth/email-already-in-use":
+                        setErrorMsg("This email is already registered.");
+                        break;
+                    case "auth/invalid-email":
+                        setErrorMsg("Please enter a valid email address.");
+                        break;
+                    case "auth/weak-password":
+                        setErrorMsg("Password must be at least 6 characters.");
+                        break;
+                    default:
+                        setErrorMsg("Something went wrong. Please try again.");
+                }
             } else {
-                setError("Error signing up");
+                setErrorMsg("Something went wrong. Please try again.");
             }
         }
     };
 
-    const handleGoogleSignup = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            await signInWithPopup(auth, provider);
-            router.push("/");
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);
-            } else {
-                setError("Google sign up failed");
-            }
-        }
-    };
-
-    // Return JSX inside the component
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md text-center">
-                <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
-
-                <form
-                    onSubmit={handleEmailSignup}
-                    className="flex flex-col items-stretch gap-3"
-                >
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-lg px-8 py-10 max-w-md w-full">
+                <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
+                <form onSubmit={handleSignup}>
                     <input
                         type="email"
-                        value={email}
-                        required
                         placeholder="Email address"
+                        value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="p-3 rounded border"
-                        autoComplete="email"
-                    />
-                    <input
-                        type="password"
-                        value={password}
                         required
-                        placeholder="Password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="p-3 rounded border"
-                        autoComplete="new-password"
+                        className="w-full p-3 mb-4 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-400"
                     />
-                    {error && <p className="text-red-500 text-left text-sm">{error}</p>}
-
+                    <div className="relative mb-4">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-green-400"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-3 top-3 text-gray-500 text-sm"
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
+                    {errorMsg && (
+                        <div className="text-red-600 text-center mb-2">{errorMsg}</div>
+                    )}
                     <button
                         type="submit"
-                        className="bg-green-600 text-white font-semibold py-2 rounded mt-2 hover:bg-green-700 transition"
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg duration-200 mb-3"
                     >
                         Sign Up
                     </button>
                 </form>
-
                 <button
-                    onClick={handleGoogleSignup}
-                    className="w-full bg-green-50 border border-green-600 text-green-700 font-semibold py-2 rounded mt-6 hover:bg-green-600 hover:text-white transition"
+                    className="w-full border border-green-300 bg-green-50 text-green-700 font-semibold py-3 rounded-lg hover:bg-green-100 duration-200 mb-3"
+                // onClick={handleGoogleSignup} // -- ADD your Google signup logic here
                 >
                     Sign Up with Google
                 </button>
-
-                <div className="mt-6 text-sm text-gray-700">
+                <div className="text-center mt-2 text-gray-600">
                     I have an account.{" "}
-                    <Link href="/auth/login" className="text-green-600 font-semibold hover:underline">
+                    <Link href="/auth/login" className="text-green-700 font-medium hover:underline">
                         Log In
                     </Link>
                 </div>
