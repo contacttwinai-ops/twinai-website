@@ -1,161 +1,136 @@
 "use client";
-import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
-import { useState } from "react";
 
-const navItems = [
-    { id: "home", label: "Home", href: "/" },
-    { id: "services", label: "Services", href: "/services" },
-    { id: "pricing", label: "Pricing", href: "/pricing" },
-    { id: "about", label: "About", href: "/about" },
-];
+import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
+import { auth } from "./lib/firebaseConfig";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 export default function Navbar() {
-    const { data: session, status } = useSession();
-    const [isOpen, setIsOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
-    if (status === "loading") return null;
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+        });
+
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        };
+
+        window.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            unsubscribe();
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            setUser(null);
+            setMenuOpen(false);
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+    };
+
+    const getInitial = () => {
+        if (!user) return "";
+        if (user.displayName) return user.displayName.trim().charAt(0).toUpperCase();
+        if (user.email) {
+            const emailPrefix = user.email.split("@")[0];
+            return emailPrefix.charAt(0).toUpperCase();
+        }
+        return "?";
+    };
 
     return (
-        <nav className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-6 py-3 shadow-md">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
-                {/* Logo */}
-                <div className="text-2xl font-bold">Qynero</div>
+        <nav className="bg-blue-600 text-white p-4 shadow-md flex justify-between items-center relative z-30">
+            <div className="text-xl font-bold">Qynero</div>
 
-                {/* Desktop Menu */}
-                <ul className="hidden md:flex gap-6 items-center">
-                    {navItems.map((item) => (
-                        <li key={item.id}>
+            <ul className="flex items-center gap-x-3">
+                {!user ? (
+                    <>
+                        <li>
                             <Link
-                                href={item.href}
-                                className="hover:text-gray-200 font-semibold"
-                            >
-                                {item.label}
-                            </Link>
-                        </li>
-                    ))}
-
-                    {!session && (
-                        <>
-                            <li>
-                                <Link
-                                    href="/auth/signin"
-                                    className="bg-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-800"
-                                >
-                                    Login
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/auth/signup"
-                                    className="bg-green-600 px-4 py-2 rounded-lg font-medium hover:bg-green-700"
-                                >
-                                    Signup
-                                </Link>
-                            </li>
-                        </>
-                    )}
-
-                    {session && (
-                        <>
-                            <li className="font-semibold">{session.user?.name || session.user?.email}</li>
-                            <li>
-                                <Link
-                                    href="/profile"
-                                    className="hover:underline font-semibold"
-                                >
-                                    Profile
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/my-purchases"
-                                    className="hover:underline font-semibold"
-                                >
-                                    My Purchases
-                                </Link>
-                            </li>
-                            <li>
-                                <button
-                                    onClick={() => signOut({ callbackUrl: "/" })}
-                                    className="bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
-                                >
-                                    Logout
-                                </button>
-                            </li>
-                        </>
-                    )}
-                </ul>
-
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden text-2xl focus:outline-none"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    ☰
-                </button>
-            </div>
-
-            {/* Mobile Dropdown */}
-            {isOpen && (
-                <div className="md:hidden mt-3 space-y-3 bg-blue-700 rounded-lg p-4">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.id}
-                            href={item.href}
-                            className="block hover:text-gray-200 font-medium"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-
-                    {!session && (
-                        <>
-                            <Link
-                                href="/auth/signin"
-                                className="block bg-blue-600 px-4 py-2 rounded-lg font-medium text-center hover:bg-blue-700"
-                                onClick={() => setIsOpen(false)}
+                                href="/auth/login"
+                                className="bg-blue-800 px-3 py-2 rounded hover:bg-blue-900"
                             >
                                 Login
                             </Link>
+                        </li>
+                        <li>
                             <Link
                                 href="/auth/signup"
-                                className="block bg-green-600 px-4 py-2 rounded-lg font-medium text-center hover:bg-green-700"
-                                onClick={() => setIsOpen(false)}
+                                className="bg-green-600 px-3 py-2 rounded hover:bg-green-700"
                             >
                                 Signup
                             </Link>
-                        </>
-                    )}
+                        </li>
+                    </>
+                ) : (
+                    <li className="relative flex items-center" ref={dropdownRef}>
+                        <button
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            className="flex items-center gap-2 font-semibold focus:outline-none"
+                        >
+                            <span
+                                className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-400 border-2 border-white text-white font-bold text-lg select-none overflow-hidden"
+                                title={user.displayName || user.email}
+                            >
+                                {user.photoURL && user.photoURL !== "" ? (
+                                    <img
+                                        src={user.photoURL}
+                                        alt="Avatar"
+                                        className="w-9 h-9 rounded-full object-cover"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                    />
+                                ) : (
+                                    getInitial()
+                                )}
+                            </span>
+                            <span className="hidden sm:inline">{user.displayName || user.email}</span>
+                        </button>
 
-                    {session && (
-                        <>
-                            <p className="font-semibold">{session.user?.name || session.user?.email}</p>
-                            <Link
-                                href="/profile"
-                                className="block hover:underline font-medium"
-                                onClick={() => setIsOpen(false)}
+                        {menuOpen && (
+                            <div
+                                className="absolute top-full right-0 mt-2 bg-white text-black rounded shadow-lg flex flex-col z-50"
+                                style={{
+                                    minWidth: "10rem",
+                                    maxWidth: "calc(100vw - 1rem)",
+                                    marginRight: "0.5rem",
+                                }}
                             >
-                                Profile
-                            </Link>
-                            <Link
-                                href="/my-purchases"
-                                className="block hover:underline font-medium"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                My Purchases
-                            </Link>
-                            <button
-                                onClick={() => signOut({ callbackUrl: "/" })}
-                                className="w-full bg-white text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
-                            >
-                                Logout
-                            </button>
-                        </>
-                    )}
-                </div>
-            )}
+                                <Link
+                                    href="/profile"
+                                    className="px-4 py-2 hover:bg-gray-100 border-b border-gray-200"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    Profile
+                                </Link>
+                                <Link
+                                    href="/my-purchases"
+                                    className="px-4 py-2 hover:bg-gray-100 border-b border-gray-200"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    My Purchases
+                                </Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-4 py-2 text-left hover:bg-gray-100"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        )}
+                    </li>
+                )}
+            </ul>
         </nav>
     );
 }
