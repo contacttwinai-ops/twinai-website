@@ -1,46 +1,52 @@
 "use client";
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../lib/firebaseConfig";
+import { useRouter } from "next/navigation";
+import { auth, googleProvider } from "../../lib/firebaseConfig";
+import {
+    createUserWithEmailAndPassword,
+    signInWithPopup,
+} from "firebase/auth";
 import Link from "next/link";
+import { getFriendlyErrorMessage } from "../../utils/errorMessages";
 
 export default function SignupPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setErrorMsg("");
-
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            // Redirect or show success message...
+            router.push("/"); // signup ke baad home page redirect
         } catch (error: unknown) {
-            if (typeof error === "object" && error !== null && "code" in error) {
+            if (
+                typeof error === "object" &&
+                error !== null &&
+                "code" in error
+            ) {
                 const err = error as { code: string };
-                switch (err.code) {
-                    case "auth/email-already-in-use":
-                        setErrorMsg("This email is already registered.");
-                        break;
-                    case "auth/invalid-email":
-                        setErrorMsg("Please enter a valid email address.");
-                        break;
-                    case "auth/weak-password":
-                        setErrorMsg("Password must be at least 6 characters.");
-                        break;
-                    default:
-                        setErrorMsg("Something went wrong. Please try again.");
-                }
+                setErrorMsg(getFriendlyErrorMessage(err.code));
             } else {
-                setErrorMsg("Something went wrong. Please try again.");
+                setErrorMsg("An unexpected error occurred. Please try again.");
             }
         }
     };
 
+    const handleGoogleSignup = async () => {
+        try {
+            await signInWithPopup(auth, googleProvider);
+            router.push("/"); // Google signup ke baad redirect
+        } catch (error) {
+            setErrorMsg("Google signup failed. Try again.");
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
             <div className="bg-white rounded-2xl shadow-lg px-8 py-10 max-w-md w-full">
                 <h2 className="text-3xl font-bold text-center mb-6">Sign Up</h2>
                 <form onSubmit={handleSignup}>
@@ -80,8 +86,8 @@ export default function SignupPage() {
                     </button>
                 </form>
                 <button
+                    onClick={handleGoogleSignup}
                     className="w-full border border-green-300 bg-green-50 text-green-700 font-semibold py-3 rounded-lg hover:bg-green-100 duration-200 mb-3"
-                // onClick={handleGoogleSignup} // -- ADD your Google signup logic here
                 >
                     Sign Up with Google
                 </button>
