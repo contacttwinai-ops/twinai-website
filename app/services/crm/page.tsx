@@ -1,30 +1,91 @@
-'use client';
+"use client";
 
-export default function CRMServicePage() {
+import { useState, ChangeEvent, FormEvent } from "react";
+
+type Customer = {
+    name: string;
+    email: string;
+    phone: string;
+};
+
+export default function CRMAutomation() {
+    const [customers, setCustomers] = useState<Customer[]>([]);
+    const [form, setForm] = useState<Customer>({
+        name: "",
+        email: "",
+        phone: "",
+    });
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleAddCustomer = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setCustomers([...customers, form]);
+        setForm({ name: "", email: "", phone: "" });
+    };
+
     return (
-        <main style={{
-            maxWidth: "700px",
-            margin: "2rem auto",
-            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-            padding: "1rem",
-            background: "#fff"
-        }}>
-            <h1 style={{ color: "#1976d2", marginBottom: "1rem", fontWeight: 700, fontSize: "2rem" }}>
-                CRM Automation
-            </h1>
-            <p style={{ fontSize: "1.1rem", color: "#444", marginBottom: "1.5rem" }}>
-                Automate your customer management and sales process with our advanced AI-powered CRM Automation. Track leads, set reminders, and close deals faster.
-            </p>
-            <h3 style={{ color: "#1565c0", marginBottom: "0.8rem", fontWeight: 600, fontSize: "1.1rem" }}>
-                Key Features:
-            </h3>
-            <ul style={{ color: "#222", fontSize: "1.07rem", marginBottom: "1.2rem", paddingLeft: "1.2em" }}>
-                <li>Lead tracking & management with AI insights</li>
-                <li>Automated follow-ups and reminders</li>
-                <li>Sales pipeline visualization</li>
-                <li>Integrations with popular email & calendar apps</li>
-                <li>Real-time analytics dashboard</li>
-            </ul>
-        </main>
+        <div style={{ padding: "20px" }}>
+            <h2>CRM Automation</h2>
+            <form onSubmit={handleAddCustomer} style={{ marginBottom: "20px" }}>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Customer Name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                    style={{ marginRight: "10px" }}
+                />
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    style={{ marginRight: "10px" }}
+                />
+                <input
+                    type="text"
+                    name="phone"
+                    placeholder="Phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    required
+                    style={{ marginRight: "10px" }}
+                />
+                <button type="submit">Add Customer</button>
+            </form>
+
+            <h3>Customer List</h3>
+            <table border={1} cellPadding={8} cellSpacing={0}>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {customers.map((cust, idx) => (
+                        <tr key={idx}>
+                            <td>{cust.name}</td>
+                            <td>{cust.email}</td>
+                            <td>{cust.phone}</td>
+                        </tr>
+                    ))}
+                    {customers.length === 0 && (
+                        <tr>
+                            <td colSpan={3} style={{ textAlign: "center" }}>
+                                No customers added yet.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
     );
 }
